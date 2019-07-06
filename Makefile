@@ -11,3 +11,7 @@ install: all
 
 clean:
 	rm -rf .build Packages
+
+
+lint:
+	gnostic $(GOPATH)/src/github.com/googleapis/gnostic/examples/v2.0/yaml/petstore.yaml --lint-responses-swift
