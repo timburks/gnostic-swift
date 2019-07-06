@@ -17,10 +17,12 @@ import PackageDescription
 let package = Package(
   name: "SwiftOpenAPIPlugin",
   targets: [
+    Target(name: "gnostic-swift-sample", dependencies: ["Gnostic"]),
     Target(name: "gnostic-swift-generator", dependencies: ["Gnostic"]),
-    Target(name: "Gnostic")
+    Target(name: "gnostic-lint-responses-swift", dependencies: ["Gnostic"]),
+    Target(name: "Gnostic"),
   ],
   dependencies: [
-    .Package(url: "https://github.com/apple/swift-protobuf.git", Version(0,9,904)),
+    .Package(url: "https://github.com/apple/swift-protobuf.git", Version(0, 9, 904)),
   ]
 )

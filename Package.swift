@@ -1,4 +1,6 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// swift-tools-version:5.0
+
+// Copyright 2019 Google Inc. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,12 +17,25 @@
 import PackageDescription
 
 let package = Package(
-  name: "SwiftOpenAPIPlugin",
-  targets: [
-    Target(name: "gnostic-swift-generator", dependencies: ["Gnostic"]),
-    Target(name: "Gnostic")
+  name: "Gnostic",
+  products: [
+    .library(name: "Gnostic", targets: ["Gnostic"]),
   ],
   dependencies: [
-    .Package(url: "https://github.com/apple/swift-protobuf.git", Version(0,9,904)),
+    .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.5.0"),
+  ],
+  targets: [
+    .target(name: "Gnostic",
+            dependencies: ["SwiftProtobuf"],
+            path: "Sources/Gnostic"),
+    .target(name: "gnostic-swift-sample",
+            dependencies: ["Gnostic"],
+            path: "Sources/gnostic-swift-sample"),
+    .target(name: "gnostic-swift-generator",
+            dependencies: ["Gnostic"],
+            path: "Sources/gnostic-swift-generator"),
+    .target(name: "gnostic-lint-responses-swift",
+            dependencies: ["Gnostic"],
+            path: "Sources/gnostic-lint-responses-swift"),
   ]
 )

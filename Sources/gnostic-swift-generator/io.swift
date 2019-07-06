@@ -45,7 +45,7 @@ class Stdin {
             }
             if count < buffSize {
                 buff += fragment[0..<count]
-                return Data(bytes: buff)
+                return Data(buff)
             }
             buff += fragment
         }
@@ -72,7 +72,7 @@ struct CodePrinter {
 
     mutating func print(_ text: String...) {
         for t in text {
-            for c in t.characters {
+            for c in t {
                 if c == "\n" {
                     content.append(c)
                     atLineStart = true
