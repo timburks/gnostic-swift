@@ -18,7 +18,7 @@ import SwiftProtobuf
 
 // "indicating the point in space at which a journey, motion, or action starts"
 func from<T: SwiftProtobuf.Message>(f: (inout T) -> Void) -> T {
-  var y = T.init()
+  var y = T()
   f(&y)
   return y
 }
@@ -41,7 +41,7 @@ func StringQueryParameter(
   }
 }
 
-func ObjectResponse(_ component : String) -> Openapi_V3_NamedResponseOrReference {
+func ObjectResponse(_ component: String) -> Openapi_V3_NamedResponseOrReference {
   return from {
     $0.name = "200"
     $0.value.response.content = from {
@@ -56,7 +56,6 @@ func ObjectResponse(_ component : String) -> Openapi_V3_NamedResponseOrReference
 }
 
 func main() throws {
-
   let document: Openapi_V3_Document = from {
     $0.openapi = "3.0"
 
@@ -77,7 +76,8 @@ func main() throws {
           $0.parameters = [
             StringQueryParameter("ids", "A comma-separated list of IDs", required: true),
             StringQueryParameter(
-              "market", "The market (an ISO 3166-1 alpha-2 country code)", required: false),
+              "market", "The market (an ISO 3166-1 alpha-2 country code)", required: false
+            ),
           ]
           $0.responses = from {
             $0.responseOrReference.append(
@@ -85,7 +85,7 @@ func main() throws {
             )
           }
         }
-      })
+    })
     $0.components = from {
       $0.schemas.additionalProperties.append(
         from {
@@ -99,14 +99,16 @@ func main() throws {
                     "The type of the album: one of 'album', 'single', or 'compilation'."
                   $0.type = "string"
                 }
-              })
+            })
           }
         }
       )
     }
   }
-  let serializedResponse = try document.serializedData()
-  Stdout.write(bytes: serializedResponse)
+
+  let serialized = try document.serializedData()
+  let file = FileHandle(forWritingAtPath: "spotify.pb")!
+  file.write(serialized)
 }
 
 try main()
